@@ -47,12 +47,52 @@ const checkInput = function(input) {
 };
 
 //Function to Capture Input
-const makeGuess = function(letter) {
-    letter = letter.toUpperCase(); 
-    if (guessedLetters.includes(letter)) {
+const makeGuess = function(guess) {
+    guess = guess.toUpperCase(); 
+    if (guessedLetters.includes(guess)) {
         message.innerText = "You already guessed this letter. Try again."
     } else {
-        guessedLetters.push(letter);
+        guessedLetters.push(guess);
         console.log(guessedLetters);
+        showGuessedLetters();
+        updateWordInProgress(guessedLetters);
+    }
+};
+
+//Function to Show the Guessed Letters
+const showGuessedLetters = function() {
+    guessedLettersElement.innerHTML = "";
+    
+    for(const letter in guessedLetters ) {
+        const li = document.createElement("li");
+        li.innerText = letter; //SO FAR UNABLE TO GET VALUE AND DISPLAY TO USER
+        guessedLettersElement.append(li);
+    }
+};
+
+//Function to Update the Word in Progress
+//This function will replace the circle symbols with the correct letters guessed.
+const updateWordInProgress = function(guessedLetters) {
+    const wordUpper = word.toUpperCase();
+    const wordArray = wordUpper.split("");
+    console.log(wordArray);
+    const newArray = [];
+    for (const letter of wordArray) {
+        if(guessedLetters.includes(letter)) {
+            newArray.push(letter.toUpperCase());
+        } else {
+            newArray.push("●");
+        }
+    }
+    console.log(newArray);
+    wordInProgress.innerText = newArray.join("");
+    checkIfPlayerWon();
+};
+
+//Function to Check If the Player Won
+const checkIfPlayerWon = function() {
+    if (word.toUpperCase() === wordInProgress.innerText) {
+        message.classList.add("win");
+        message.innerHTML = `<p class="highlight">You guessed correct the word! Congrats!</p>`;
     }
 };
